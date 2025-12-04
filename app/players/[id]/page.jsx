@@ -1,4 +1,4 @@
-// app/players/[id]/page.jsx
+
 
 async function getPlayerById(id) {
     const res = await fetch('http://localhost:3000/data/players.json', { cache: 'no-store' });
@@ -9,7 +9,7 @@ async function getPlayerById(id) {
 
 export default async function PlayerPage({ params }) {
   
-  // !!! ИСПРАВЛЕНО: Теперь ищем id, потому что папка называется [id]
+
   const playerId = params.id; 
   
   const player = await getPlayerById(playerId);
@@ -20,11 +20,11 @@ export default async function PlayerPage({ params }) {
     </main>;
   }
 
-  // Отображение карточки игрока (остальной код прежний)
+
   return (
     <main className="p-10 bg-black min-h-screen text-white">
       <h1 className="text-5xl font-bold mb-4 text-green-400">{player.name}</h1>
-      {/* ... (остальной код) ... */}
+   
       
       <h2 className="text-3xl font-semibold mt-8 mb-3 border-b border-gray-700 pb-2">🏅 Трофеи</h2>
       <ul className="list-disc ml-6 space-y-1">
