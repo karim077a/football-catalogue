@@ -1,22 +1,24 @@
 [
   {
-    "id": "barcelona",
-    "name": "ФК Барселона",
-    "country": "Испания",
-    "stadium": "Олимпик Льюис Компанис",
-    "history": [
-      {"year": "2024", "squad": ["Левандовски", "Гави", "Педри", "Канселу"]},
-      {"year": "2010", "squad": ["Месси", "Хави", "Иньеста", "Пуйоль"]}
-    ]
+    "id": "real-madrid",
+    "name": "Real Madrid CF",
+    "stadium": "Santiago Bernabéu",
+    "players": {
+      "goalkeepers": ["Thibaut Courtois", "Andriy Lunin"],
+      "defenders": ["Dani Carvajal", "Éder Militão", "Antonio Rüdiger", "Ferland Mendy"],
+      "midfielders": ["Jude Bellingham", "Federico Valverde", "Luka Modrić", "Aurélien Tchouaméni"],
+      "forwards": ["Vinícius Júnior", "Kylian Mbappé", "Rodrygo", "Endrick"]
+    }
   },
   {
-    "id": "realmadrid",
-    "name": "Реал Мадрид",
-    "country": "Испания",
-    "stadium": "Сантьяго Бернабеу",
-    "history": [
-      {"year": "2024", "squad": ["Беллингем", "Винисиус", "Родриго", "Модрич"]},
-      {"year": "2010", "squad": ["Роналду", "Касильяс", "Рамос", "Кака"]}
-    ]
+    "id": "barcelona",
+    "name": "FC Barcelona",
+    "stadium": "Spotify Camp Nou",
+    "players": {
+      "goalkeepers": ["Marc-André ter Stegen", "Iñaki Peña"],
+      "defenders": ["Jules Koundé", "Ronald Araújo", "Pau Cubarsí", "Alejandro Balde"],
+      "midfielders": ["Pedri", "Gavi", "Frenkie de Jong", "Dani Olmo"],
+      "forwards": ["Lamine Yamal", "Robert Lewandowski", "Raphinha", "Ferran Torres"]
+    }
   }
 ]

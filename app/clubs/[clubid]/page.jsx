@@ -1,54 +1,75 @@
+async function getClub(id) {
+    const res = await fetch('http://localhost:3000/data/clubs.json', { cache: 'no-store' });
+    const clubs = await res.json();
+    return clubs.find(c => c.id === id);
+}
 
-import * as fs from 'fs/promises';
-import path from 'path';
-
-async function getClubById(id) {
-    
-   
-    const filePath = path.join(process.cwd(), 'public', 'data', 'clubs.json');
-    
-    try {
-      
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        const clubs = JSON.parse(fileContent);
-        
-      
-        return clubs.find(c => c.id === id); 
-    } catch (error) {
-        console.error("Ошибка чтения clubs.json:", error);
-        return null;
-    }
+// Вспомогательный компонент для красивых секций
+function PositionGroup({ title, players, icon, accentColor }) {
+    if (!players || players.length === 0) return null;
+    return (
+        <div className="mb-10 animate-fadeIn">
+            <h3 className={`text-xl font-bold mb-4 flex items-center gap-2 ${accentColor}`}>
+                <span className="text-2xl">{icon}</span> {title}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {players.map((name, i) => (
+                    <div key={i} className="bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all cursor-default">
+                        <p className="font-medium text-gray-200">{name}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default async function ClubPage({ params }) {
-  
+    const { clubid } = await params; 
+    const club = await getClub(clubid);
 
-  const clubId = params.clubid; 
-  
-  const club = await getClubById(clubId);
+    if (!club) return <div className="p-20 text-white text-center">Клуб не найден</div>;
 
+    return (
+        <main className="min-h-screen bg-[#0a0a0a] text-white p-6 md:p-16">
+            <div className="max-w-6xl mx-auto">
+                
+                <header className="mb-12 border-b border-white/10 pb-8">
+                    <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+                        {club.name.toUpperCase()}
+                    </h1>
+                    <p className="text-gray-400 mt-2 flex items-center gap-2 text-lg">
+                        <span className="opacity-50">LOCATION:</span> {club.stadium}
+                    </p>
+                </header>
 
-  if (!club) {
-    return <main className="p-10 bg-black min-h-screen text-white text-center">
-        <h1 className="text-4xl font-bold text-red-500">Клуб "{clubId}" не найден! 😥</h1>
-    </main>;
-  }
-
-  return (
-    <main className="p-10 bg-black min-h-screen text-white">
-      <h1 className="text-5xl font-bold mb-4 text-blue-400">{club.name}</h1>
-      <p className="text-xl text-gray-400 mb-6">Страна: {club.country} | Стадион: {club.stadium}</p>
-      
-     
-      <h2 className="text-3xl font-semibold mt-8 mb-3 border-b border-gray-700 pb-2">📜 История и Составы</h2>
-      
-      {club.history && club.history.map((era, index) => (
-          <div key={index} className="mb-6 p-4 bg-gray-900 rounded-lg border border-gray-800">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-2">Состав {era.year} года</h3>
-              <p>Игроки: {era.squad.join(', ')}</p>
-          </div>
-      ))}
-
-    </main>
-  );
+                
+                <section>
+                    <PositionGroup 
+                        title="ВРАТАРИ" 
+                        players={club.players?.goalkeepers} 
+                        icon="🧤" 
+                        accentColor="text-yellow-500" 
+                    />
+                    <PositionGroup 
+                        title="ЗАЩИТНИКИ" 
+                        players={club.players?.defenders} 
+                        icon="🛡️" 
+                        accentColor="text-blue-500" 
+                    />
+                    <PositionGroup 
+                        title="ПОЛУЗАЩИТНИКИ" 
+                        players={club.players?.midfielders} 
+                        icon="🧠" 
+                        accentColor="text-green-500" 
+                    />
+                    <PositionGroup 
+                        title="НАПАДАЮЩИЕ" 
+                        players={club.players?.forwards} 
+                        icon="⚡" 
+                        accentColor="text-red-500" 
+                    />
+                </section>
+            </div>
+        </main>
+    );
 }
