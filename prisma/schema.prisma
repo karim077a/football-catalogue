@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" 
+}
+
+model Player {
+  id       String   @id
+  name     String
+  position String
+  club     String
+  trophies String[]
+  history  Json[]
+}
+
+model Club {
+  id      String @id
+  name    String
+  stadium String
+}
+
+model Tournament {
+  id      Int      @id @default(autoincrement())
+  title   String
+  icon    String
+  winners Winner[]
+}
+
+model Winner {
+  id           Int        @id @default(autoincrement())
+  year         Int
+  club         String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int
+}

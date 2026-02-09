@@ -1,24 +1,11 @@
-
-
 import Link from 'next/link';
 
+import playersData from '@/data/players.json';
 
-async function getPlayers() {
- 
-  const res = await fetch('http://localhost:3000/data/players.json', { cache: 'no-store' });
+export default function PlayersPage() {
   
-  if (!res.ok) {
-    return null;
-  }
-  return res.json();
-}
 
-
-export default async function PlayersPage() {
  
-  const playersData = await getPlayers();
-
-
   if (!playersData) {
     return (
         <main className="p-8 bg-black min-h-screen text-white text-center">
@@ -44,7 +31,8 @@ export default async function PlayersPage() {
               <p className="text-sm text-gray-400">{player.position} | {player.club}</p>
               
               <div className="mt-3 text-sm text-yellow-400">
-                {player.trophies.slice(0, 2).join(', ')}... 
+                {/* Твоя логика вывода первых двух трофеев */}
+                {player.trophies && player.trophies.slice(0, 2).join(', ')}... 
               </div>
             </div>
           </Link>
