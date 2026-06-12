@@ -1,8 +1,32 @@
-import clubsData from '@/data/clubs.json';
 
-async function getClub(id) {
-   
-    return clubsData.find(c => c.id === id);
+import { query } from '@/data/db';
+
+async function getClubData(id) {
+    
+    const clubResult = await query('SELECT * FROM clubs WHERE id = $1;', [id]);
+    const club = clubResult.rows[0]; // Берем первую найденную строку
+
+    if (!club) return null;
+
+    
+    const playersResult = await query('SELECT * FROM players WHERE club_id = $1;', [id]);
+    const playersList = playersResult.rows;
+
+    
+    const goalkeepers = playersList.filter(p => p.position.toLowerCase() === 'вратарь' || p.position.toLowerCase() === 'goalkeeper').map(p => p.name);
+    const defenders = playersList.filter(p => p.position.toLowerCase() === 'защитник' || p.position.toLowerCase() === 'defender').map(p => p.name);
+    const midfielders = playersList.filter(p => p.position.toLowerCase() === 'полузащитник' || p.position.toLowerCase() === 'midfielder').map(p => p.name);
+    const forwards = playersList.filter(p => p.position.toLowerCase() === 'нападающий' || p.position.toLowerCase() === 'forward').map(p => p.name);
+
+    return {
+        ...club,
+        players: {
+            goalkeepers,
+            defenders,
+            midfielders,
+            forwards
+        }
+    };
 }
 
 function PositionGroup({ title, players, icon, accentColor }) {
@@ -25,7 +49,8 @@ function PositionGroup({ title, players, icon, accentColor }) {
 
 export default async function ClubPage({ params }) {
     const { clubid } = await params; 
-    const club = await getClub(clubid);
+    
+    const club = await getClubData(clubid);
 
     if (!club) return <div className="p-20 text-white text-center font-bold">Клуб не найден! 🏟️</div>;
 

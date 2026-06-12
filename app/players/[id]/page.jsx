@@ -1,16 +1,18 @@
-import playersData from '@/data/players.json';
 
+import { query } from '@/data/db';
 
-async function getPlayer(id) {
-    return playersData.find(p => p.id === id);
+async function getPlayerData(id) {
+    
+    const result = await query('SELECT * FROM players WHERE id = $1;', [id]);
+    return result.rows[0]; 
 }
 
 export default async function PlayerPage({ params }) {
     
     const { id } = await params; 
-    const player = await getPlayer(id);
-
     
+    const player = await getPlayerData(id);
+
     if (!player) return <div className="p-20 text-white text-center">Игрок не найден!</div>;
 
     return (
@@ -20,7 +22,6 @@ export default async function PlayerPage({ params }) {
                 <span className="text-green-400 font-bold uppercase tracking-widest text-sm">
                     {player.position}
                 </span>
-                
                 
                 <h1 className="text-6xl font-black mt-2 mb-6 uppercase italic">
                     {player.name}
@@ -39,7 +40,6 @@ export default async function PlayerPage({ params }) {
                         </ul>
                     </div>
 
-                    
                     <div className="space-y-4">
                         <h2 className="text-2xl font-bold text-blue-400 border-b border-white/10 pb-2 flex items-center gap-2">
                             🗺️ КАРЬЕРА

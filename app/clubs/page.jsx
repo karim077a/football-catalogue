@@ -1,10 +1,12 @@
 import Link from 'next/link';
 
-import clubsData from '@/data/clubs.json';
+import { query } from '@/data/db';
 
-export default function ClubsPage() {
+export default async function ClubsPage() {
   
-  const clubs = clubsData;
+  
+  const result = await query('SELECT * FROM clubs;');
+  const clubs = result.rows; 
 
   return (
     <main className="p-8 bg-black min-h-screen text-white">
